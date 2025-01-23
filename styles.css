@@ -18,6 +18,14 @@ body {
 .navbar-brand:hover {
     color: #ff2d6c;
 }
+.carousel-item img {
+    width: 100%; /* Asegura que las imágenes ocupen todo el ancho disponible */
+    height: 400px; /* Ajusta la altura según sea necesario */
+    object-fit: contain; /* Las imágenes se ajustan para estar completas sin recorte */
+    margin: 0 auto; /* Centra la imagen */
+}
+
+
 
 .nav-link {
     color: #ff5c8a;
@@ -75,9 +83,7 @@ footer h5 {
     padding-bottom: 10px;
 }
 
-footer p {
-    padding-bottom: 10px;
-}
+
 
 footer a {
     color: #ff5c8a;
