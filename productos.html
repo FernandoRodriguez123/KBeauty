@@ -59,14 +59,32 @@
             </div>
         </div>
     </nav>
+    <div class="container mt-3">
+        <div class="row justify-content-end">
+            <div class="col-md-3 text-end">
+                <div class="p-3 border rounded shadow-sm bg-light">
+                    <h5 class="mb-3">Cesta</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Artículos:</span>
+                        <span id="cart-count" class="fw-bold">0</span>
+                    </div>
+                    <div class="d-grid gap-2 mt-3">
+                        <button id="empty-cart" class="btn btn-danger">Vaciar cesta</button>
+                        <button id="checkout" class="btn btn-success">Realizar compra</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    
+
     <div class="container my-5">
         <div class="row">
-            
+
             <div class="col-md-2 col-sm-4 col-6">
                 <div class="card product-card">
-                    <img src="productos/aceiteLimpiadorMadagascarCentella.png" class="card-img-top" alt="Producto de uñas">
+                    <img src="productos/aceiteLimpiadorMadagascarCentella.png" class="card-img-top"
+                        alt="Producto de uñas">
                     <div class="card-body">
                         <h5 class="card-title">Producto Uñas 1</h5>
                         <p class="card-text">Un producto perfecto para cuidar tus uñas. Mejora el brillo y la
@@ -451,7 +469,7 @@
                 </div>
             </div>
 
-            
+
         </div>
     </div>
 
@@ -483,6 +501,44 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        const cart = [];
+        const cartCount = document.getElementById('cart-count');
+        const cartContainer = document.getElementById('cart-container');
+
+        // Add product to cart
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const productName = button.getAttribute('data-product');
+                const productPrice = parseFloat(button.getAttribute('data-price'));
+                cart.push({ name: productName, price: productPrice });
+                updateCartDisplay();
+            });
+        });
+
+        // Update cart display
+        function updateCartDisplay() {
+            cartCount.textContent = cart.length;
+        }
+
+        // Empty cart
+        document.getElementById('empty-cart').addEventListener('click', () => {
+            cart.length = 0;
+            updateCartDisplay();
+        });
+
+        // Checkout
+        document.getElementById('checkout').addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('La cesta está vacía.');
+                return;
+            }
+            const productList = cart.map(item => `${item.name} - ${item.price}€`).join('\n');
+            const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+            alert(`Productos en la cesta:\n${productList}\n\nPrecio total: ${totalPrice}€`);
+        });
+    </script>
 
 
 
