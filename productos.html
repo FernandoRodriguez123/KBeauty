@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
@@ -55,27 +54,23 @@
                     <li class="nav-item"> <a href="https://twitter.com" target="_blank">
                             <i class="fab fa-twitter fa-2x" style="color: #1DA1F2; margin: 0 10px;"></i>
                         </a></li>
+                    <li>
+                        <button id="cart-button" class="relative" data-bs-toggle="modal" data-bs-target="#cart-modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 hover:text-gray-600"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m-2 0L7 13m0 0l-1.6 8H18m0 0H6.4M18 21a1 1 0 100-2 1 1 0 000 2zm-12 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            <span id="cart-count"
+                                class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-1">0</span>
+                        </button>
+
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-end">
-            <div class="col-md-3 text-end">
-                <div class="p-3 border rounded shadow-sm bg-light">
-                    <h5 class="mb-3">Cesta</h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Artículos:</span>
-                        <span id="cart-count" class="fw-bold">0</span>
-                    </div>
-                    <div class="d-grid gap-2 mt-3">
-                        <button id="empty-cart" class="btn btn-danger">Vaciar cesta</button>
-                        <button id="checkout" class="btn btn-success">Realizar compra</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
     <div class="container my-5">
@@ -474,7 +469,7 @@
     </div>
 
 
-    <!-- Footer -->
+
     <footer id="footer" class="text-center p-4">
         <div class="container">
             <div class="row">
@@ -497,48 +492,118 @@
             </div>
             <div class="mt-4">
                 <p>Copyright © K-Beauty 2025 </p>
-                <!-- <a href="#">Avisos Legales</a> | <a href="#">Cookies</a> | <a href="#">Privacidad</a> -->
+
             </div>
         </div>
     </footer>
 
+    <div id="cart-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tu Cesta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="cart-items">No hay productos en la cesta.</p>
+                    <p id="total-price">Total: 0€</p>
+                </div>
+                <div class="modal-footer">
+                    
+                    <button id="empty-cart" class="btn btn-danger">Vaciar Cesta</button>
+                    <button id="checkout" class="btn btn-success">Finalizar Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Variables para la cesta
         const cart = [];
         const cartCount = document.getElementById('cart-count');
-        const cartContainer = document.getElementById('cart-container');
+        const cartItems = document.getElementById('cart-items');
+        const totalPrice = document.getElementById('total-price');
 
-        // Add product to cart
+        // Añadir productos a la cesta
         document.querySelectorAll('.add-to-cart').forEach(button => {
             button.addEventListener('click', () => {
-                const productName = button.getAttribute('data-product');
-                const productPrice = parseFloat(button.getAttribute('data-price'));
-                cart.push({ name: productName, price: productPrice });
-                updateCartDisplay();
+                // Encontrar el contenedor del producto correspondiente al botón
+                const productCard = button.closest('.card-body');
+                if (!productCard) {
+                    console.error('No se pudo encontrar el contenedor del producto.');
+                    return;
+                }
+
+                // Obtener el nombre y el precio del producto
+                const productName = productCard.querySelector('.card-title')?.textContent.trim();
+                const productPriceText = productCard.querySelector('.price')?.textContent.trim();
+
+                if (!productName || !productPriceText) {
+                    console.error('Faltan datos del producto.');
+                    return;
+                }
+
+                const productPrice = parseFloat(productPriceText.replace('€', ''));
+                if (isNaN(productPrice)) {
+                    console.error('Precio del producto no válido.');
+                    return;
+                }
+
+                // Comprobar si el producto ya está en la cesta
+                const existingProduct = cart.find(item => item.name === productName);
+                if (existingProduct) {
+                    existingProduct.quantity += 1; // Incrementar cantidad
+                } else {
+                    // Añadir nuevo producto
+                    cart.push({ name: productName, price: productPrice, quantity: 1 });
+                }
+
+                updateCartDisplay(); // Actualizar visualización
             });
         });
 
-        // Update cart display
+        // Actualizar la visualización de la cesta
         function updateCartDisplay() {
-            cartCount.textContent = cart.length;
-        }
+            cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0); // Actualizar contador
 
-        // Empty cart
+            // Mostrar productos en el modal
+            if (cart.length > 0) {
+                cartItems.innerHTML = cart.map(item => `
+            <p>${item.name} - ${item.quantity} x ${item.price}€ = ${(item.quantity * item.price).toFixed(2)}€</p>
+        `).join('');
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                totalPrice.textContent = `Total: ${total.toFixed(2)}€`;
+            } else {
+                cartItems.textContent = 'No hay productos en la cesta.';
+                totalPrice.textContent = 'Total: 0€';
+            }
+        }
+       
+
+
+        // Vaciar cesta
         document.getElementById('empty-cart').addEventListener('click', () => {
-            cart.length = 0;
-            updateCartDisplay();
+            cart.length = 0; // Vaciar el array de la cesta
+            updateCartDisplay(); // Actualizar la visualización
         });
 
-        // Checkout
+        // Finalizar compra
         document.getElementById('checkout').addEventListener('click', () => {
             if (cart.length === 0) {
                 alert('La cesta está vacía.');
                 return;
             }
-            const productList = cart.map(item => `${item.name} - ${item.price}€`).join('\n');
-            const totalPrice = cart.reduce((total, item) => total + item.price, 0);
-            alert(`Productos en la cesta:\n${productList}\n\nPrecio total: ${totalPrice}€`);
+            const productList = cart.map(item => `${item.quantity} x ${item.name} - ${item.price}€`).join('\n');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alert(`Gracias por tu compra:\n\n${productList}\n\nPrecio total: ${total.toFixed(2)}€`);
+            cart.length = 0; // Vaciar la cesta después de la compra
+            updateCartDisplay();
         });
+
     </script>
+
+
+
 
 
 
