@@ -1,0 +1,255 @@
+<?php
+require_once __DIR__ . '/config/configuration.php';
+require_once __DIR__ . '/controllers/AuthController.php';
+
+session_start();
+
+$controller = new AuthController();
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Beauty</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">
+                <img src="logo.png" alt="K-Beauty Logo" width="225" height="100">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="facialDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Servicios
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="facialDropdown">
+                            <li><a class="dropdown-item" href="servicios.php">Análisis dermatológica</a></li>
+                            <li><a class="dropdown-item" href="servicios.php">Limpieza facial</a></li>
+                            <li><a class="dropdown-item" href="servicios.php">Clases de autocuidado facial</a></li>
+                            <li><a class="dropdown-item" href="servicios.php">Tratamientos faciales</a></li>
+                            <li><a class="dropdown-item" href="servicios.php">Spa capilar</a></li>
+                            <li><a class="dropdown-item" href="servicios.php">Cuidado de pestañas</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="productos.php">Nuestros Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cita.php">Cita</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#footer">Contáctanos</a></li>
+                    <li class="nav-item">
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="login.php">Entrar</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if (!isset($_SESSION['user'])): ?>
+                            <a class="nav-link" href="register.php">Registrarse</a>
+                            <?php else: ?>
+                            <a class="nav-link" href="perfil.php">Perfil</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="nav-item"> <a href="https://facebook.com" target="_blank">
+                            <i class="fab fa-facebook fa-2x" style="color: #3b5998; margin: 0 10px;"></i>
+                        </a></li>
+                    <li class="nav-item"><a href="https://instagram.com" target="_blank">
+                            <i class="fab fa-instagram fa-2x" style="color: #E4405F; margin: 0 10px;"></i>
+                        </a></li>
+                    <li class="nav-item"> <a href="https://twitter.com" target="_blank">
+                            <i class="fab fa-twitter fa-2x" style="color: #1DA1F2; margin: 0 10px;"></i>
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+
+        <div class="container my-5">
+            <h2 class="text-center mb-4">Nuestros Servicios</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Análisis Dermatológico</h5>
+                            <p class="card-text">Conoce el estado de tu piel con un análisis completo realizado por nuestros expertos.</p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Limpieza Facial</h5>
+                            <p class="card-text">Disfruta de una limpieza profunda para una piel radiante y saludable.</p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Clases de Autocuidado Facial</h5>
+                            <p class="card-text">Aprende a cuidar tu piel con nuestras clases prácticas y personalizadas.</p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Tratamientos faciales</h5>
+                            <p class="card-text">Cuida y revitaliza tu piel con nuestros tratamientos diseñados para hidratar, limpiar y mejorar su apariencia. </p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Spa capilar</h5>
+                            <p class="card-text">Relaja y revitaliza tu cabello con tratamientos que hidratan, fortalecen y restauran su brillo natural. </p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Cuidado de pestañas</h5>
+                            <p class="card-text">Resalta tu mirada con tratamientos diseñados para fortalecer, alargar y embellecer tus pestañas.</p>
+                            <a href="servicios.php" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div id="productsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <h2 class="text-center mb-4">Nuestros Productos</h2>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="productos/aceiteLimpiadorMadagascarCentella.png" class="d-block w-100" alt="Producto 1" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/acidoHialurónico.png" class="d-block w-100" alt="Producto 2" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/aloeSkinTonner.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/altheaSerum.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/anua AciteLimpiador.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/anua LimpiadorFacial.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/aplb.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/balsamoHandaiyan.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/balsamoLabial.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/banilaBalsamo.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/beeUltimateCream.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/blueElixirRetinol.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/bodyExfolianteKit.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="productos/boteMedicube.png" class="d-block w-100" alt="Producto 3" onclick="window.location.href='productos.php'">
+
+                </div>
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+
+
+
+    <footer id="footer" class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Horario</h5>
+                    <p>Lunes a Viernes - 10:00 a 20:00</p>
+                    <p>Sábado - 10:00 a 14:00</p>
+                    <p>Domingo - Cerrado</p>
+                    <h5>Correo</h5>
+                    <p>kbeauty.vigo@gmail.com</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Ubicación</h5>
+                    <div class="d-flex justify-content-center">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12634.724489437243!2d-8.7222!3d42.2401!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2bf04a08e1b10d%3A0x1a3d56c85d2e70bc!2sAvenida%20de%20Gran%20V%C3%ADa%2039%2C%20Vigo%2C%20Pontevedra!5e0!3m2!1ses!2ses!4v1675941212839!5m2!1ses!2ses"
+                            width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <p>Copyright © K-Beauty 2025 </p>
+               
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
